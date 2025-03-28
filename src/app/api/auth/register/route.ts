@@ -1,67 +1,23 @@
 import { NextResponse } from 'next/server';
-import { hash } from 'bcrypt';
-
-// In a real application, this would be a database call
-let users = [
-  {
-    id: '1',
-    name: 'Test User',
-    email: 'test@example.com',
-    password: '$2b$10$mSgAKFGY1h6GqY3RKCRrDeaGtpoR4S4ao3mwUH/pmQp2GVcK5CwSi', // 'password123'
-  },
-];
+import { signIn } from 'next-auth/react';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password } = await request.json();
+    const body = await request.json();
+    const { email, password, name } = body;
 
-    // Basic validation
-    if (!name || !email || !password) {
-      return NextResponse.json(
-        { message: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
+    // In a real application, you would:
+    // 1. Validate the input
+    // 2. Hash the password
+    // 3. Store the user in your database
+    // 4. Create a session
 
-    // Check if user already exists
-    if (users.some((user) => user.email === email)) {
-      return NextResponse.json(
-        { message: 'User already exists' },
-        { status: 400 }
-      );
-    }
-
-    // Hash password
-    const hashedPassword = await hash(password, 10);
-
-    // Create new user
-    const newUser = {
-      id: String(users.length + 1),
-      name,
-      email,
-      password: hashedPassword,
-    };
-
-    // Add user to "database"
-    // In a real application, this would be a database insert
-    users.push(newUser);
-
-    // Return success response without the password
-    return NextResponse.json(
-      {
-        message: 'User registered successfully',
-        user: {
-          id: newUser.id,
-          name: newUser.name,
-          email: newUser.email,
-        },
-      },
-      { status: 201 }
-    );
+    // For development, we'll just return success
+    return NextResponse.json({ message: 'Registration successful' });
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
-      { message: 'An error occurred during registration' },
+      { message: 'Registration failed' },
       { status: 500 }
     );
   }
