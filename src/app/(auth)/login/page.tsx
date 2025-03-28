@@ -29,8 +29,8 @@ export default function LoginPage() {
         return;
       }
 
-      // Redirect to dashboard or callback URL
-      const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+      // Redirect to home or callback URL
+      const callbackUrl = searchParams.get('callbackUrl') || '/home';
       router.push(callbackUrl);
     } catch (err) {
       setError('An error occurred during login');

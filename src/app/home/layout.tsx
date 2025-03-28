@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -19,7 +19,7 @@ import {
   User
 } from 'lucide-react';
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function HomeLayout({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -40,12 +40,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { name: 'My Languages', href: '/dashboard/languages', icon: BookOpen },
-    { name: 'AI Practice', href: '/dashboard/practice', icon: Video },
-    { name: 'Find Partners', href: '/dashboard/partners', icon: Users },
-    { name: 'Native Speakers', href: '/dashboard/natives', icon: Globe },
-    { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+    { name: 'Home', href: '/home', icon: Home },
+    { name: 'My Languages', href: '/home/languages', icon: BookOpen },
+    { name: 'AI Practice', href: '/home/practice', icon: Video },
+    { name: 'Find Partners', href: '/home/partners', icon: Users },
+    { name: 'Settings', href: '/home/settings', icon: Settings },
   ];
 
   return (
@@ -58,7 +57,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         >
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        <div className="text-lg font-semibold">LangConnect</div>
+        <div className="text-lg font-semibold">LinguaLearn</div>
         <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
           <User size={18} className="text-blue-600" />
         </div>
@@ -72,7 +71,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         {/* Logo */}
         <div className="flex items-center justify-center h-16 px-4 border-b">
-          <span className="text-xl font-bold text-blue-600">LangConnect</span>
+          <span className="text-xl font-bold text-blue-600">LinguaLearn</span>
         </div>
 
         {/* User info */}
@@ -85,9 +84,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
             <div className="ml-3">
               <p className="text-sm font-medium text-gray-900">
-                {session?.user?.name || 'User'}
-              </p>
-              <p className="text-xs text-gray-500 truncate">
                 {session?.user?.email || 'user@example.com'}
               </p>
             </div>
@@ -108,6 +104,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </Link>
               </li>
             ))}
+            <li>
+              <button
+                onClick={() => signOut({ callbackUrl: '/login' })}
+                className="flex items-center w-full px-3 py-2 text-sm font-medium rounded-md hover:bg-red-50 hover:text-red-600"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="mr-3 h-5 w-5 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Logout
+              </button>
+            </li>
           </ul>
         </nav>
       </aside>
